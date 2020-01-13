@@ -44,3 +44,6 @@ jobs:
       - store_artifacts:
           path: test-reports
           destination: test-reports
+test:
+  override:
+    - flake8 ./
