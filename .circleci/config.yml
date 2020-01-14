@@ -33,6 +33,7 @@ jobs:
           name: "Create Test Reports"
           working_directory: ~/workspace/src
           command: |
+            mkdir -p myapp/test-reports/flake8
             flake8-junit-report test-reports/flake8/flake8.txt test-reports/flake8/flake8_junit.xml
             coverage html -d test-reports/coverage
           when: always
