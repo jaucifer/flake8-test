@@ -2,20 +2,21 @@ version: 2.1
 
 jobs:
   build:
-    working_directory: ~/workspace
     docker:
       - image: circleci/python:3.7
+    working_directory: ~/workspace
+    
   steps:
     - checkout
-      - restore_cache:
+    - restore_cache:
           keys:
           - v1-dependencies-{{ checksum "requirements.txt" }}
           # fallback to using the latest cache if no exact match is found
           - v1-dependencies-
-      - run:
+    - run:
           name: "Install dependencies"
           command: pip install --user -r requirements.txt
-      - save_cache:
+    - save_cache:
           paths:
             - ./venv
           key: v1-dependencies-{{ checksum "requirements.txt" }}
