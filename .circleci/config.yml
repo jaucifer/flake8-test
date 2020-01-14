@@ -31,7 +31,7 @@ jobs:
       working_directory: ~/workspace/src
       command: coverage run manage.py test
     - run:
-      name "Create Test Reports"
+      name: "Create Test Reports"
       working_directory: ~/workspace/src
       command: |
         flake8-junit-report test-reports/flake8/flake8.txt test-reports/flake8/flake8_junit.xml
