@@ -30,7 +30,7 @@ jobs:
       name: "Run test"
       working_directory: ~/workspace/src
       command: coverage run manage.py test
-    -run:
+    - run:
       name "Create Test Reports"
       working_directory: ~/workspace/src
       command: |
