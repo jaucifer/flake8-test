@@ -26,20 +26,3 @@ jobs:
       command: |
         mkdir -p test-reports/flake8
         flake8 . --output-file=test-reports/flake8/flake8.txt
-    - run:
-      name: "Run test"
-      working_directory: ~/workspace/src
-      command: coverage run manage.py test
-    - run:
-      name: "Create Test Reports"
-      working_directory: ~/workspace/src
-      command: |
-        flake8-junit-report test-reports/flake8/flake8.txt test-reports/flake8/flake8_junit.xml
-        coverage html -d test-reports/coverage
-      when: always
-    - store_test_reports:
-      path: myapp/test-reports
-      
-    - store_artifacts:
-      path: myapp/test-reports
-      destination: tr1
