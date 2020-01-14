@@ -1,46 +1,45 @@
-# Python CircleCI 2.0 configuration file
-#
-# Check https://circleci.com/docs/2.0/language-python/ for more details
-#
-version: 2
+version: 2.1
+
 jobs:
   build:
+    working_directory: ~/workspace
     docker:
-      # specify the version you desire here
-      # use `-browsers` prefix for selenium tests, e.g. `3.6.1-browsers`
-      - image: circleci/python:3.5.3
-
-      # Specify service dependencies here if necessary
-      # CircleCI maintains a library of pre-built images
-      # documented at https://circleci.com/docs/2.0/circleci-images/
-      # - image: circleci/postgres:9.4
-    working_directory: ~/repo
-    steps:
-      - checkout
-      # Download and cache dependencies
-      - restore_cache:
-          keys:
-          - v1-dependencies-{{ checksum "requirements.txt" }}
-          # fallback to using the latest cache if no exact match is found
-          - v1-dependencies-
-      - run:
-          name: install dependencies
-          command: |
-            python3 -m venv venv
-            . venv/bin/activate
-            pip install --upgrade pip
-            pip install -r requirements.txt
-      - save_cache:
-          paths:
-            - ./venv
-          key: v1-dependencies-{{ checksum "requirements.txt" }}
-
-      # run tests!
-      - run:
-          name: run linting and metrics
-          command: |
-            . venv/bin/activate
-            flake8 ./  --max-line-length=100 --output-file test-reports
-      - store_artifacts:
-          path: test-reports
-          destination: test-reports
+      - image: circleci/python:3.6.4
+        environment:
+          RDS_DB_NAME: circleci
+          RDS_HOST: localhost
+          RDS_PORT: 5432
+          RDS_USERNAME: root
+          RDS_PASSWORD:
+      - image: circleci/postgres:9.6
+        environment:
+          POSTGRES_USER: root
+          POSTGRES_DB: circleci
+  steps:
+    - checkout
+    - run:
+      name: "Install dependencies"
+        command: sudo pip install -Ur requirements.txt
+    - run:
+      name: "Run Linter"
+      working_directory: ~/workspace/src
+      command: |
+        mkdir -p test-reports/flake8
+        flake8 . --output-file=test-reports/flake8/flake8.txt
+    - run:
+      name: "Run test"
+      working_directory: ~/workspace/src
+      command: coverage run manage.py test
+    -run:
+      name "Create Test Reports"
+      working_directory: ~/workspace/src
+      command: |
+        flake8-junit-report test-reports/flake8/flake8.txt test-reports/flake8/flake8_junit.xml
+        coverage html -d test-reports/coverage
+      when: always
+    - store_test_reports:
+      path: myapp/test-reports
+      
+    - store_artifacts:
+      path: myapp/test-reports
+      destination: tr1
