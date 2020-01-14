@@ -36,7 +36,7 @@ jobs:
             flake8-junit-report test-reports/flake8/flake8.txt test-reports/flake8/flake8_junit.xml
             coverage html -d test-reports/coverage
           when: always
-      - store_test_reports:
+      - store_test_results:
           path: myapp/test-reports
       
       - store_artifacts:
