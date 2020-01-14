@@ -19,13 +19,17 @@ jobs:
     - checkout
     - run:
       name: "Install dependencies"
-      command: sudo pip install -r requirements.txt
+      command: pip install --user -r requirements.txt
     - run:
       name: "Run Linter"
       working_directory: ~/workspace/src
       command: |
         mkdir -p test-reports/flake8
         flake8 . --output-file=test-reports/flake8/flake8.txt
+    - run:
+      name: "Run test"
+      working_directory: ~/workspace/src
+      command: coverage run manage.py test
     - run:
       name: "Create Test Reports"
       working_directory: ~/workspace/src
