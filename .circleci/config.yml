@@ -1,6 +1,6 @@
 version: 2.1
 jobs:
-  calculator-test:
+  code-test:
     docker:
       - image: circleci/python:3.7
     working_directory: ~/repo
@@ -66,9 +66,9 @@ jobs:
 
 workflows:
   version: 2.1
-  calculator-test-result:
+  code-test-result:
     jobs:
-      - calculator-test:
+      - code-test:
           filters:
             branches:
               only: master
