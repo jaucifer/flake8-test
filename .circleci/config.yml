@@ -1,9 +1,9 @@
 version: 2.1
 jobs:
-  build:
+  calculator-test:
     docker:
       - image: circleci/python:3.7
-    working_directory: ~/workspace
+    working_directory: ~/repo
     steps:
       - checkout
       - restore_cache:
@@ -18,28 +18,57 @@ jobs:
           paths:
             - ./venv
           key: v1-dependencies-{{ checksum "requirements.txt" }}
-
       - run:
           name: "Run Linter"
-          working_directory: ~/workspace/src
+          working_directory: ~/repo
           command: |
             mkdir -p test-reports/flake8
             flake8 . --output-file=test-reports/flake8/flake8.txt
       - run:
-          name: "Run test"
-          working_directory: ~/workspace/src
-          command: coverage run manage.py test
+          name: "Check for warnings."
+          command: |
+            if [ -f .flake8warnings ]; then
+              flake8 --append-config=.flake8warnings
+            else
+              flake8 --extend-ignore="$FLAKE8_ERRORS"
+            fi
+          when: always
+      - run:
+          name: Check for errors.
+          command: |
+            if [ -f .flake8errors ]; then
+              flake8 --append-config=.flake8errors
+            else
+              flake8 --extend-ignore="$FLAKE8_WARNINGS"
+            fi
+          when: always
+
+      - run:
+          name: "Run tests"
+          command: |
+            flake8 --exclude=venv* --statistics
+            flake8 . --bug-report
+            flake8 . --benchmark
+            flake8 . --count
+          when: always
       - run:
           name: "Create Test Reports"
-          working_directory: ~/workspace/src
+          working_directory: ~/repo
           command: |
-            mkdir -p myapp/test-reports/flake8
             flake8_junit test-reports/flake8/flake8.txt test-reports/flake8/flake8_junit.xml
-            coverage html -d test-reports/coverage
           when: always
       - store_test_results:
-          path: myapp/test-reports
+          path: test-reports
       
       - store_artifacts:
-          path: myapp/test-reports
+          path: test-reports
           destination: tr1
+
+workflows:
+  version: 2.1
+  calculator-test-result:
+    jobs:
+      - calculator-test:
+          filters:
+            branches:
+              only: master
