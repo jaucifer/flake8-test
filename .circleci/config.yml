@@ -50,12 +50,12 @@ jobs:
             flake8 . --bug-report
             flake8 . --benchmark
             flake8 . --count
-            py.test --junitxml=test-reports/pytest-junit.xml
           when: always
       - run:
           name: "Create Test Reports"
           working_directory: ~/repo
           command: |
+            pytest --junitxml=test-reports/pytest-junit.xml --html=test-reports/pytest_report.html --self-contained-html
             flake8_junit test-reports/flake8/flake8.txt test-reports/flake8/flake8_junit.xml
           when: always
       - store_test_results:
