@@ -60,9 +60,7 @@ jobs:
       - run:
           name: "Create Test Reports"
           working_directory: ~/repo
-          command: |
-            pytest --junitxml=test-reports/pytest/pytest-junit.xml --html=test-reports/pytest/pytest_report.html --self-contained-html
-            flake8_junit test-reports/flake8/flake8.txt test-reports/flake8/flake8_junit.xml
+          command: flake8_junit test-reports/flake8/flake8.txt test-reports/flake8/flake8_junit.xml
           when: always
       - store_test_results:
           path: test-reports
