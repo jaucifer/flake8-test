@@ -50,6 +50,7 @@ jobs:
             flake8 . --bug-report
             flake8 . --benchmark
             flake8 . --count
+            pytest --junitxml=test-reports/pytest-junit.xml
           when: always
       - run:
           name: "Create Test Reports"
