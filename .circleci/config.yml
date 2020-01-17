@@ -55,7 +55,7 @@ jobs:
           name: "Create PYTest Reports"
           command: |
             pytest repo/
-            pytest --junitxml=test-reports/pytest/pytest-junit.xml --html=test-reports/pytest/pytest_report.html --self-contained-html
+            #pytest --junitxml=test-reports/pytest/pytest-junit.xml --html=test-reports/pytest/pytest_report.html --self-contained-html
           when: always
       - run:
           name: "Create Test Reports"
