@@ -55,7 +55,7 @@ jobs:
           name: "Create PYTest Reports"
           working_directory: ~/repo
           command: |
-            pytest --exclude=venv* --maxfail=2 -rf app.py
+            pytest --help
             #pytest --junitxml=test-reports/pytest/pytest-junit.xml --html=test-reports/pytest/pytest_report.html --self-contained-html
           when: always
       - run:
