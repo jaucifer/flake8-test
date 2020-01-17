@@ -12,6 +12,9 @@ jobs:
           # fallback to using the latest cache if no exact match is found
           - v1-dependencies-
       - run:
+          name: "Install Python Dependencies 1"
+          command: echo 'export PATH=~$PATH:~/.local/bin' >> $BASH_ENV && source $BASH_ENV
+      - run:
           name: "Install dependencies"
           command: pip install --user -r requirements.txt
       - save_cache:
@@ -55,7 +58,7 @@ jobs:
           name: "Create PYTest Reports"
           working_directory: ~/repo
           command: |
-            python -m pytest --junitxml=test-reports/pytest/pytest-junit.xml --html=test-reports/pytest/pytest_report.html --self-contained-html
+            pytest --junitxml=test-reports/pytest/pytest-junit.xml --html=test-reports/pytest/pytest_report.html --self-contained-html
           when: always
       - run:
           name: "Create Test Reports"
