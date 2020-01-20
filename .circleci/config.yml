@@ -58,7 +58,7 @@ jobs:
           name: "Create PYTest Reports"
           working_directory: ~/repo
           command: |
-            pytest app.py --junitxml=test-reports/pytest/pytest-junit.xml --html=test-reports/pytest/pytest_report.html --self-contained-html
+            #pytest app.py --junitxml=test-reports/pytest/pytest-junit.xml --html=test-reports/pytest/pytest_report.html --self-contained-html
           when: always
       - run:
           name: "Create Test Reports"
